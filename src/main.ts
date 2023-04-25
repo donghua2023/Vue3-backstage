@@ -4,13 +4,27 @@ import App from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import router from './router'
-import  { Store } from './store'
 import { createPinia } from 'pinia'
+import dhRequest from './service'
 
 const pinia = createPinia()
-const app = createApp(App)
 
-app.use(pinia)
-app.mount('#app')
 
-createApp(App).use(router).use(Store).use(ElementPlus).mount('#app')
+createApp(App).use(router).use(pinia).use(ElementPlus).mount('#app')
+
+interface DataType {
+  data: any
+  returnCode: string
+  success: boolean
+}
+dhRequest.request<DataType>({
+  url: '/login/111',
+  method: 'POST',
+  data: {
+    name: 'admin-root',
+    password: '88888888'
+  },
+  showLoading: true
+}).then((res) => {
+  console.log(res)
+})

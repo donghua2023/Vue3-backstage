@@ -2,7 +2,7 @@
 import HelloWorld from './components/HelloWorld.vue'
 import login from './views/login/login.vue'
 import index from './views/main/index.vue'
-import { Store } from './store'
+import { Store } from './stores'
 const store = Store()
 </script>
 
