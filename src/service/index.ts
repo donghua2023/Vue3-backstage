@@ -5,24 +5,15 @@ import { BASE_URL, TIME_OUT} from './request/config'
 const dhRequest = new DHRequest({
   baseURL: BASE_URL,
   timeout: TIME_OUT,
+  showLoading: true,
   interceptors: {
-    requestInterceptor: (config) => {
-      const token = ''
+    requestSuccessFn: (config) => {
+      const token = '2'
       if(token) {
         config.headers!.Authorization = `Bearer ${token}`
       }
       return config
-    },
-    requestInterceptorCatch: (err) => {
-      return err
-    },
-    responseInterceptor: (res) => {
-      return res
-    },
-    responseInterceptorCatch: (err) => {
-      return err
-
-    },
+    }
   }
 })
 
