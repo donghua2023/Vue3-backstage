@@ -1,17 +1,10 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
 import login from './views/login/login.vue'
-import index from './views/main/index.vue'
-import { Store } from './stores'
-const store = Store()
 </script>
 
 <template>
   <div>
     <login></login>
-    <index></index>
-    <h2>{{ store.name }}</h2>
-    <HelloWorld msg="Vite + Vue" />
   </div>
 </template>
 

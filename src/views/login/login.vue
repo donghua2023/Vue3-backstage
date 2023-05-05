@@ -1,11 +1,20 @@
 <template>
-  <div>login文件</div>
-  <el-button type="primary">Primary</el-button>
-  <el-button type="success">Success</el-button>
-  <el-button type="info">Info</el-button>
-  <el-button type="warning">Warning</el-button>
+  <div class="login">
+    <LoginPane />
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import LoginPane from './cpns/login-pane.vue'
+</script>
 
-<style scoped></style>
+<style scoped>
+.login {
+  height: 100vh;
+  width: 100%;
+  background-image: url('../../assets/img/login-bg.svg');
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
