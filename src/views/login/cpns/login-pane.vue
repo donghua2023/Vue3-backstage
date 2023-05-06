@@ -57,6 +57,10 @@ const ISREMPWD = 'isRemPwd'
 const isRemPwd = ref<boolean>(localCache.getCache(ISREMPWD) ?? false)
 watch(isRemPwd, (newValue) => {
   localCache.setCache(ISREMPWD, newValue)
+  // localstorage不支持存false，所以这边做一个移除处理
+  if (!newValue) {
+    localCache.removeCache(ISREMPWD)
+  }
 })
 
 const activeName = ref('account')
