@@ -2,8 +2,8 @@ import {defineStore} from 'pinia'
 import type { IAccount } from '@/types'
 import {accountLoginRequest} from '@/service/login/login'
 import {localCache} from '@/utils/cache'
+import {LOGIN_TOKEN} from '@/types'
 
-const LOGIN_TOKEN = 'token'
 export const useLoginStore = defineStore('login', {
   state: ()=> ({
     name: '',

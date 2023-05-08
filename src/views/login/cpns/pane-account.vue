@@ -22,9 +22,9 @@ import { ElForm, ElMessage, FormRules } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useLoginStore } from '@/stores/login/login'
 import { localCache } from '@/utils/cache'
+import router from '@/router'
+import { CACHE_NAME, CACHE_PASSWORD } from '@/types'
 
-const CACHE_NAME = 'name'
-const CACHE_PASSWORD = 'password'
 // 1. 定义accent数据
 const account = reactive({
   name: localCache.getCache(CACHE_NAME) ?? '',
@@ -54,12 +54,15 @@ const formRef = ref<InstanceType<typeof ElForm>>()
 const loginStore = useLoginStore()
 
 function loginAction(isRemPwd: boolean) {
-  formRef.value?.validate((valid) => {
+  formRef.value?.validate(async (valid) => {
     if (valid) {
       // 获取用户输入的账号和密码
       const name = account.name
       const password = account.password
-      loginStore.loginAccountAction({ name, password })
+      await loginStore.loginAccountAction({ name, password })
+      // 登入成功跳转到主页面
+      router.push('/main')
+
       // 判断是否需要记住密码
       if (isRemPwd) {
         localCache.setCache(CACHE_NAME, name)

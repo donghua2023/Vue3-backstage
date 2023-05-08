@@ -23,19 +23,16 @@ class DHRequest {
     // 添加所有的实例都有拦截器
     this.instance.interceptors.response.use(
       (res) => {
-        console.log('所有的实例都有的拦截器: 响应成功');
         this.loading?.close()
         return res.data
       },
       (err) => {
-        console.log('所有的实例都有的拦截器: 响应失败');
         this.loading?.close()
         return err
       }
     )
     this.instance.interceptors.request.use(
       (config) => {
-        console.log('所有的实例都有的拦截器: 请求成功');
 
         if(this.showLoading) {
           this.loading =  ElLoading.service({
@@ -47,7 +44,6 @@ class DHRequest {
         return config
       },
       (err) => {
-        console.log('所有的实例都有的拦截器: 请求失败');
         return err
       }
     )
