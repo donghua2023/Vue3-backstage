@@ -101,4 +101,10 @@ function handleLoginBtnclick() {
     width: 100%;
   }
 }
+:deep(.el-tabs__nav) {
+  width: 100% !important;
+}
+:deep(.el-tabs__item) {
+  width: 50% !important;
+}
 </style>
