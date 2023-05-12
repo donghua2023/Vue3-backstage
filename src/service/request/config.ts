@@ -2,7 +2,8 @@
 let BASE_URL = ''
 let TIME_OUT = 10000
 if(import.meta.env.DEV) {
-  BASE_URL = "http://111.230.245.205:8880"
+  // BASE_URL = "http://111.230.245.205:8880"
+  BASE_URL = "http://codercba.com:5000"
 } else if(import.meta.env.PROD) {
   BASE_URL = "http://baidu.com"
 } else {

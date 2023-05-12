@@ -5,10 +5,11 @@ import 'element-plus/dist/index.css'
 import './assets/css/index.less'
 import 'normalize.css'
 import router from './router'
-import { createPinia } from 'pinia'
+import store from './stores'
+import icons from './global/register-icons'
 
-const pinia = createPinia()
+const app = createApp(App)
+app.use(router).use(store).use(ElementPlus).use(icons)
 
-
-createApp(App).use(router).use(pinia).use(ElementPlus).mount('#app')
+app.mount('#app')
 

@@ -7,3 +7,15 @@ export function accountLoginRequest(account: IAccount) {
     data: account
   })
 }
+// 通过用户ID查询用户信息
+export function getUserInfoById(id: number) {
+  return dhRequest.get({
+    url: `users/${id}`
+  })
+}
+// 通过角色id查询用户权限
+export function getUserRoleById(id: number) {
+  return dhRequest.get({
+    url: `role/${id}/menu`
+  })
+}

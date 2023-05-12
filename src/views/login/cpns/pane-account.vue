@@ -20,7 +20,7 @@
 <script lang="ts" setup>
 import { ElForm, ElMessage, FormRules } from 'element-plus'
 import { reactive, ref } from 'vue'
-import { useLoginStore } from '@/stores/login/login'
+import useLoginStore from '@/stores/login/login'
 import { localCache } from '@/utils/cache'
 import router from '@/router'
 import { CACHE_NAME, CACHE_PASSWORD } from '@/types'

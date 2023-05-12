@@ -1,11 +1,14 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { createPinia } from 'pinia'
+import type {App} from 'vue'
+import useLoginStore from './login/login'
 
-export const Store:any = defineStore('counter', () => {
-  const name = ref('donghua')
-  function edit() {
-    name.value = 'zengdonghua'
-  }
+const pinia = createPinia()
+function registerStore(app:App<Element>) {
+  // use的pinia
+  app.use(pinia)
+  // 加载本地的数据
+  const LoginStore = useLoginStore()
+  LoginStore.loadLocalCacheAction()
+}
+export default registerStore
 
-  return { name, edit }
-})
