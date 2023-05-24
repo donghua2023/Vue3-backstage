@@ -23,13 +23,13 @@ export function mapMenusToRoutes(rolelist:any[]) {
   for (const role of rolelist) {
     for (const childrole of role.children) {
       const route:any = localRoutes.find((item)=> item.path === childrole.url)
-
       // 面包屑一级菜单需要做重定向（没有注册对应的页面）
       if(route) {
-        if(!routes.find((item)=>{item.path === role.url})) {
+        if(!routes.find(item=>item.path === role.url)) {
           routes.push({path: role.url, redirect: route.path})
         }
       }
+
       routes.push(route)
 
       // 记录一下获取到的第一个值
@@ -47,11 +47,12 @@ export function mapMenusToRoutes(rolelist:any[]) {
  * @获取默认菜单
  */
 export function mapMenuToPath(routePath:string, roleList:any[] ){
+  console.log(routePath, '777')
   for(const item of roleList) {
     for(const sitem of item.children) {
       if(routePath === sitem.url) {
-        const id = sitem.id
-        return id
+        console.log(sitem, '((((0000))))')
+        return sitem
       }
     }
   }

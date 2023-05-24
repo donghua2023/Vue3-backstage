@@ -33,4 +33,8 @@ import MainHeader from '@/components/main-header/main-header.vue'
     }
   }
 }
+.el-main {
+  background-color: rgb(247, 245, 245);
+  padding: 10px;
+}
 </style>
