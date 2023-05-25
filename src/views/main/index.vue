@@ -1,12 +1,12 @@
 <template>
   <div class="main">
     <el-container class="main-container">
-      <el-aside width="210px">
-        <MainAside />
+      <el-aside :width="isFold ? '75px' : '210px'">
+        <MainAside :isFold="isFold" />
       </el-aside>
       <el-container>
         <el-header height="50px">
-          <MainHeader />
+          <MainHeader @fold-change="handleFoldchange" />
         </el-header>
         <el-main>
           <router-view></router-view>
@@ -17,8 +17,14 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import MainAside from '@/components/main-aside/main-aside.vue'
 import MainHeader from '@/components/main-header/main-header.vue'
+
+const isFold = ref(false)
+const handleFoldchange = () => {
+  isFold.value = !isFold.value
+}
 </script>
 
 <style scoped lang="less">
@@ -31,6 +37,7 @@ import MainHeader from '@/components/main-header/main-header.vue'
     &::-webkit-scrollbar {
       display: none;
     }
+    transition: width 0.4s ease;
   }
 }
 .el-main {

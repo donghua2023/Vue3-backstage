@@ -1,6 +1,5 @@
 <template>
   <div class="main">
-    <div class="fold">折叠</div>
     <div class="crumb">
       <el-breadcrumb separator-icon="ArrowRight">
         <template v-for="item in breadCrumbData" :index="index">
