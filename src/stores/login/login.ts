@@ -43,6 +43,7 @@ const useLoginStore = defineStore('login', {
       routes.forEach(route=>{
         router.addRoute('main', route)
       })
+      router.push('/main')
     },
 
     /**
@@ -58,11 +59,16 @@ const useLoginStore = defineStore('login', {
         this.roleList = roleList
         // 初始化路由
         const routes = mapMenusToRoutes(roleList)
-        routes.forEach(route=>{
+        routes.forEach((route)=>{
           router.addRoute('main', route)
         })
+        // router.push(router.currentRoute.value.path)
+        // router.push('/main')
+        // console.log(router.currentRoute, 'routerrouter(())')
+        // const route = userRoute()
+        //空白页的问题解决了，main.ts中，use（store）要在路由的前面，不然匹配动态路由会没有初始化，从而匹配到404
         // 解决router4刷新变成空白页（我们需要手动调用 router.replace() 来改变当前的位置，并覆盖我们原来的位置）
-        router.replace(router.currentRoute.value.fullPath)
+        // router.replace(router.currentRoute.value.fullPath)
 
       }
     }

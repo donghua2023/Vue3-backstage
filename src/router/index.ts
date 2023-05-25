@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, useRoute } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { RouteRecordRaw } from 'vue-router'
 import { localCache } from '@/utils/cache'
 import { firstMenu } from '@/utils/map-menu'
@@ -26,12 +26,11 @@ const routes: RouteRecordRaw[] = [
 
 const router = createRouter({
   routes,
-  history: createWebHashHistory(location.pathname + location.search),
+  history: createWebHashHistory(),
   strict: true
 })
 // 路由重定向
 router.beforeEach((to) => {
-  console.log(to.path, 'to,path')
   const token = localCache.getCache('token')
   if (!token && to.path !== '/login') {
     return { path: '/login' }
