@@ -165,13 +165,13 @@
 
 <script setup lang="ts">
 import { ref, reactive, unref } from 'vue'
-import useUserstore from '@/stores/main/system/user'
+import useUserstore from '@/stores/main/system/user/user'
 import {
   fecthUserById,
   deleteUserById,
   saveUser,
   editUser
-} from '@/service/main/system/user'
+} from '@/service/main/system/user/user'
 import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { formatUTC } from '@/utils/format'
