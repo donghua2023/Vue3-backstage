@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { postUsersListData, fecthRoleList, fecthDepartmentList } from '@/service/main/system/user'
+import { postUsersListData, fecthRoleList, fecthDepartmentList } from '@/service/main/system/user/user'
 
 const useUserstore = defineStore('user', {
   state: ()=>({

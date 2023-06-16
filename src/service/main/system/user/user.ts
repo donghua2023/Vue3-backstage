@@ -1,4 +1,4 @@
-import dhRequest from '../../index'
+import dhRequest from '../../../index'
 
 export function postUsersListData(param:object) {
   return dhRequest.post({
