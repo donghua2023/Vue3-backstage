@@ -1,14 +1,14 @@
 <template>
   <div>
-    <pageSearch
+    <page-search
       :searchData="searchConfig"
       @queryClick="handleQueryClick"
-    ></pageSearch>
+    ></page-search>
   </div>
 </template>
 
 <script setup lang="ts">
-import pageSearch from '@/components/page-search/page-search.vue'
+import PageSearch from '@/components/page-search/page-search.vue'
 import { searchConfig } from './config/search.config.ts'
 
 const handleQueryClick = () => {
