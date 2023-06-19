@@ -1,48 +1,9 @@
 <template>
   <div class="main">
-    <div class="mainHeard">
-      <el-form :model="seachForm" label-width="120px" ref="seachFormRef">
-        <el-row :gutter="50">
-          <el-col :span="8">
-            <el-form-item label="用户名" prop="name">
-              <el-input v-model="seachForm.name" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="真实姓名" prop="realname">
-              <el-input v-model="seachForm.realname" /> </el-form-item
-          ></el-col>
-          <el-col :span="8">
-            <el-form-item label="手机号码" prop="cellphone">
-              <el-input v-model="seachForm.cellphone" /> </el-form-item
-          ></el-col>
-          <el-col :span="8">
-            <el-form-item label="状态" prop="enable">
-              <el-select v-model="seachForm.enable">
-                <el-option label="启用" value="1" />
-                <el-option label="禁用" value="0" />
-              </el-select> </el-form-item
-          ></el-col>
-          <el-col :span="8">
-            <el-form-item label="创建时间" prop="createAt">
-              <el-date-picker
-                v-model="seachForm.createAt"
-                type="daterange"
-                range-separator="-"
-                start-placeholder="开始时间"
-                end-placeholder="结束时间"
-                size="default" /></el-form-item
-          ></el-col>
-        </el-row>
-      </el-form>
-
-      <div class="btns">
-        <el-button icon="Refresh" @click="resetSeachForm">重置</el-button>
-        <el-button icon="Search" type="primary" @click="fecthUserListData"
-          >查询</el-button
-        >
-      </div>
-    </div>
+    <page-search
+      :searchData="searchConfig"
+      @queryClick="fecthUserListData"
+    ></page-search>
     <div class="content">
       <div class="contentHeader">
         <h3>{{ '用户列表' }}</h3>
@@ -164,8 +125,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, unref } from 'vue'
+import { ref, reactive } from 'vue'
 import useUserstore from '@/stores/main/system/user/user'
+import PageSearch from '@/components/page-search/page-search.vue'
+import { searchConfig } from './config/search.config.ts'
 import {
   fecthUserById,
   deleteUserById,
@@ -185,8 +148,6 @@ const seachForm = reactive({
 })
 const currentPage = ref(1)
 const pageSize = ref(10)
-
-let seachFormRef = ref()
 
 // 从store拿到表格的数据
 const userStore = useUserstore()
@@ -208,12 +169,6 @@ function fecthUserListData() {
   const offset = (currentPage.value - 1) * size
   const pageInfo = { size, offset }
   userStore.postUsersListAction({ ...pageInfo, ...seachForm })
-}
-// 重置搜索表单
-const resetSeachForm = () => {
-  const form = unref(seachFormRef)
-  form.resetFields()
-  fecthUserListData()
 }
 // 新增、编辑、删除列表
 let isEdit = ref(false)
