@@ -3,23 +3,29 @@
     <page-search
       :searchData="searchConfig"
       @queryClick="handleQueryClick"
-    ></page-search>
+      v-show="!isSearchHide"></page-search>
     <page-content
       tableDataUrl="/department"
       :tableConfig="contentconfig"
       :contentData="tableDate"
       @editClick="editClick"
-      @deleteClick="deleteClick"
-    >
+      @deleteClick="deleteClick">
     </page-content>
   </div>
 </template>
 
 <script setup lang="ts">
+import { provide } from 'vue'
 import PageSearch from '@/components/page-search/page-search.vue'
 import { searchConfig } from './config/search.config.ts'
 import PageContent from '@/components/page-content/page-content.vue'
 import { contentconfig } from './config/content.config.ts'
+// 这里控制搜索区的显示与隐藏
+import useDepartmentStore from '@/stores/main/system/department/department'
+import { storeToRefs } from 'pinia'
+const departmentStore = useDepartmentStore()
+const { isSearchHide } = storeToRefs(departmentStore)
+provide('isSearchHide', isSearchHide)
 
 const handleQueryClick = () => {
   console.log('父组件查询')
