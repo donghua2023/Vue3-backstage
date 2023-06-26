@@ -1,14 +1,15 @@
 <template>
   <div class="container">
-    <div class="btnArea">按钮</div>
+    <div class="btnArea">
+      <content-btn-area></content-btn-area>
+    </div>
     <div class="content">
       <el-table
         :data="contentData"
         border
         style="width: 100%"
         max-height="400"
-        fit
-      >
+        fit>
         <template v-for="item in tableColumns">
           <template v-if="item.type === 'handler'">
             <el-table-column v-bind="item" align="center">
@@ -18,8 +19,7 @@
                   icon="Edit"
                   text
                   type="primary"
-                  @click="handleEditClick(scope.row)"
-                >
+                  @click="handleEditClick(scope.row)">
                   编辑
                 </el-button>
                 <el-button
@@ -27,8 +27,7 @@
                   icon="Edit"
                   text
                   type="danger"
-                  @click="handleDeleteClick(scope.row)"
-                >
+                  @click="handleDeleteClick(scope.row)">
                   删除
                 </el-button>
               </template>
@@ -48,14 +47,14 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+        @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import ContentBtnArea from './cpns/content-btn-area.vue'
 const props = defineProps({
   tableConfig: {
     type: Object,
@@ -97,5 +96,10 @@ const handleSizeChange = () => {}
   display: flex;
   justify-content: end;
   padding: 10px 40px 10px 0;
+}
+.container {
+  background-color: #ffffff;
+  margin-top: 5px;
+  border-radius: 20px;
 }
 </style>
