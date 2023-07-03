@@ -65,7 +65,7 @@
         type="primary"
         icon="Search"
         size="large"
-        @click="$emit('queryClick')"
+        @click="$emit('queryClick', searchForm)"
         >查询</el-button
       >
     </div>
@@ -89,7 +89,7 @@ const searchForm: any = ref({})
 let searchFormRef = ref<InstanceType<typeof ElForm>>()
 const handleResetClick = () => {
   searchFormRef.value?.resetFields()
-  emit('queryClick')
+  emit('queryClick', searchForm.value)
 }
 </script>
 
