@@ -3,6 +3,7 @@ import { postUsersListData, fecthRoleList, fecthDepartmentList } from '@/service
 
 const useUserstore = defineStore('user', {
   state: ()=>({
+    isSearchHide: false,
     userTableList: [],
     totalCount: 0,
     roleIdOptions: [],

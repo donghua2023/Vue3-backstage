@@ -3,78 +3,21 @@
     <page-search
       :searchData="searchConfig"
       @queryClick="fecthUserListData"
-    ></page-search>
-    <div class="content">
-      <div class="contentHeader">
-        <h3>{{ '用户列表' }}</h3>
-        <el-button type="primary" @click="addUserItem">新增</el-button>
-      </div>
-      <div class="contentTable">
-        <el-table :data="userTableList" stripe style="width: 100%" center>
-          <el-table-column type="selection" width="55" />
-          <el-table-column type="index" label="序号" width="100" />
-          <el-table-column prop="name" label="用户名" />
-          <el-table-column prop="realname" label="真实姓名" />
-          <el-table-column prop="cellphone" label="手机号码" />
-          <el-table-column prop="enable" label="状态" width="120">
-            <template #default="scope">
-              <el-tag type="success">{{
-                scope.row.enable === 1 ? '启用' : '禁用'
-              }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="createAt" label="创建时间" width="170">
-            <template #default="scope">
-              <span>{{ formatUTC(scope.row.createAt) }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="updateAt" label="更新时间" width="170">
-            <template #default="scope">
-              <span>{{ formatUTC(scope.row.updateAt) }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" width="180">
-            <template #default="scope">
-              <el-button
-                @click="editUserItem(scope.row)"
-                text
-                icon="Edit"
-                type="primary"
-                size="small"
-                >编辑</el-button
-              >
-              <el-button
-                @click="deleteUserItemm(scope.row)"
-                text
-                icon="delete"
-                type="danger"
-                size="small"
-                >删除</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="pagination">
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 30, 50, 100, 200]"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalCount"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div>
-    </div>
+      v-show="!isSearchHide"></page-search>
+    <page-content
+      tableDataUrl="/department"
+      :tableConfig="contentconfig"
+      :contentData="userTableList"
+      @editClick="editClick"
+      @deleteClick="deleteClick">
+    </page-content>
   </div>
   <el-dialog
     v-model="userDialogVisible"
     :title="userTips"
     width="30%"
     center
-    @close="userDialogCancel"
-  >
+    @close="userDialogCancel">
     <el-form :model="userDialogForm" label-width="80px" ref="userDialogFormRef">
       <el-form-item label="用户名" prop="name">
         <el-input v-model="userDialogForm.name" />
@@ -96,22 +39,19 @@
             v-for="item in roleIdOptions"
             :key="item['id']"
             :label="item['name']"
-            :value="item['id']"
-          />
+            :value="item['id']" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="选择部门" prop="departmentId">
         <el-select
           v-model="userDialogForm.departmentId"
-          placeholder="请选择部门"
-        >
+          placeholder="请选择部门">
           <el-option
             v-for="item in departmentIdOptions"
             :key="item['id']"
             :label="item['name']"
-            :value="item['id']"
-          />
+            :value="item['id']" />
         </el-select>
       </el-form-item>
     </el-form>
@@ -125,10 +65,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, provide } from 'vue'
 import useUserstore from '@/stores/main/system/user/user'
-import PageSearch from '@/components/page-search/page-search.vue'
 import { searchConfig } from './config/search.config.ts'
+import { contentconfig } from './config/content.config'
 import {
   fecthUserById,
   deleteUserById,
@@ -137,39 +77,26 @@ import {
 } from '@/service/main/system/user/user'
 import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { formatUTC } from '@/utils/format'
-
-const seachForm = reactive({
-  name: '',
-  realname: '',
-  cellphone: '',
-  enable: '',
-  createAt: ''
-})
-const currentPage = ref(1)
-const pageSize = ref(10)
 
 // 从store拿到表格的数据
 const userStore = useUserstore()
-// userStore.postUsersListAction({ ...seachForm })
-fecthUserListData()
-const { userTableList, totalCount } = storeToRefs(userStore)
+const { userTableList, totalCount, isSearchHide } = storeToRefs(userStore)
+provide('isSearchHide', isSearchHide)
 
-// 分页
-const handleSizeChange = () => {
-  fecthUserListData()
-}
-const handleCurrentChange = () => {
-  fecthUserListData()
+contentconfig.Epagination = {
+  currentPage: ref(1),
+  pageSize: ref(10),
+  total: totalCount ?? 0
 }
 
 // 从store拿到表格的数据，发起网络请求
-function fecthUserListData() {
-  const size = pageSize.value
-  const offset = (currentPage.value - 1) * size
+function fecthUserListData(searchForm = {}) {
+  const size = contentconfig.Epagination.pageSize.value
+  const offset = (contentconfig.Epagination.currentPage.value - 1) * size
   const pageInfo = { size, offset }
-  userStore.postUsersListAction({ ...pageInfo, ...seachForm })
+  userStore.postUsersListAction({ ...pageInfo, ...searchForm })
 }
+fecthUserListData()
 // 新增、编辑、删除列表
 let isEdit = ref(false)
 const { roleIdOptions, departmentIdOptions } = storeToRefs(userStore)
@@ -193,60 +120,15 @@ let userDialogForm: IuserInfo = reactive({
 let userDialogFormRef = ref()
 const userDialogVisible = ref(false)
 const userTips = ref('默认')
-const addUserItem = () => {
-  isEdit.value = false
-  userStore.getRoleList()
-  userStore.getDepartmentList()
-  userDialogVisible.value = true
-  userTips.value = '新增用户'
-}
+// const addUserItem = () => {
+//   isEdit.value = false
+//   userStore.getRoleList()
+//   userStore.getDepartmentList()
+//   userDialogVisible.value = true
+//   userTips.value = '新增用户'
+// }
 const editUserId = ref()
-const editUserItem = async (row: any) => {
-  userStore.getRoleList()
-  userStore.getDepartmentList()
-  isEdit.value = true
-  editUserId.value = row.id
-  const { data } = await fecthUserById(row.id)
-  // userDialogForm = reactive(data)
-  userDialogForm = reactive({
-    name: data.name,
-    realname: data.realname,
-    cellphone: data.cellphone,
-    roleId: data.role.id,
-    departmentId: data.department.id
-  })
-  console.log(userDialogForm, 'row')
-  userTips.value = '编辑用户'
-  userDialogVisible.value = true
-}
-const deleteUserItemm = (row: any) => {
-  ElMessageBox.confirm('确认删除该用户？', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    type: 'warning'
-  })
-    .then(async () => {
-      const res = await deleteUserById(row.id)
-      if (res.code === 0) {
-        ElMessage({
-          message: '删除成功',
-          type: 'success'
-        })
-      } else {
-        ElMessage({
-          message: '删除失败',
-          type: 'error'
-        })
-      }
-      fecthUserListData()
-    })
-    .catch(() => {
-      ElMessage({
-        message: '用户取消删除',
-        type: 'info'
-      })
-    })
-}
+
 const userDialogCancel = () => {
   userDialogVisible.value = false
   userDialogForm.name = ''
@@ -302,6 +184,55 @@ const userDialogSave = async () => {
   }
   fecthUserListData()
   userDialogCancel()
+}
+
+const editClick = async (row: any) => {
+  console.log(row, '编辑')
+  userStore.getRoleList()
+  userStore.getDepartmentList()
+  isEdit.value = true
+  editUserId.value = row.id
+  const { data } = await fecthUserById(row.id)
+  // userDialogForm = reactive(data)
+  userDialogForm = reactive({
+    name: data.name,
+    realname: data.realname,
+    cellphone: data.cellphone,
+    roleId: data.role.id,
+    departmentId: data.department.id
+  })
+  console.log(userDialogForm, 'row')
+  userTips.value = '编辑用户'
+  userDialogVisible.value = true
+}
+const deleteClick = (row: any) => {
+  console.log(row, '删除')
+  ElMessageBox.confirm('确认删除该用户？', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(async () => {
+      const res = await deleteUserById(row.id)
+      if (res.code === 0) {
+        ElMessage({
+          message: '删除成功',
+          type: 'success'
+        })
+      } else {
+        ElMessage({
+          message: '删除失败',
+          type: 'error'
+        })
+      }
+      fecthUserListData()
+    })
+    .catch(() => {
+      ElMessage({
+        message: '用户取消删除',
+        type: 'info'
+      })
+    })
 }
 </script>
 
