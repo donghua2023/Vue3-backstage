@@ -22,7 +22,7 @@ export const searchConfig: any = [
     label: '状态',
     prop: 'enable',
     placeholder: '请选择查询的状态',
-    Options: [
+    options: [
       {label: '启用', value: '1'},
       {label: '禁用', value: '0'}
     ]
