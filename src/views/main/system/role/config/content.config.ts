@@ -1,4 +1,4 @@
-export const contentconfig = {
+export const contentconfig:any = {
   tableColumns: [
     {type: 'selection', width: "55"},
     {type: 'index', label: '序号', width: "120"},
