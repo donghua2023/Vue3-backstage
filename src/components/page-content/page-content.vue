@@ -4,32 +4,28 @@
       <content-btn-area></content-btn-area>
     </div>
     <div class="content">
-      <el-table
-        :data="contentData"
-        border
-        style="width: 100%"
-        max-height="400"
-        fit>
+      <el-table :data="contentData" border style="width: 100%" max-height="400" fit>
         <template v-for="item in tableColumns">
           <template v-if="item.type === 'handler'">
             <el-table-column v-bind="item" align="center">
               <template #default="scope">
-                <el-button
-                  v-if="item.isEdit"
-                  icon="Edit"
-                  text
-                  type="primary"
-                  @click="handleEditClick(scope.row)">
+                <el-button v-if="item.isEdit" icon="Edit" text type="primary" @click="handleEditClick(scope.row)">
                   编辑
                 </el-button>
-                <el-button
-                  v-if="item.isDelete"
-                  icon="Edit"
-                  text
-                  type="danger"
-                  @click="handleDeleteClick(scope.row)">
+                <el-button v-if="item.isDelete" icon="Edit" text type="danger" @click="handleDeleteClick(scope.row)">
                   删除
                 </el-button>
+              </template>
+            </el-table-column>
+          </template>
+          <template v-else-if="item.type === 'tag'">
+            <el-table-column v-bind="item" align="center">
+              <template #default="scope">
+                <el-tag
+                  :type="scope.row[item.prop] === item['confirmItem'] ? 'success' : 'danger'"
+                  disable-transitions
+                  >{{ scope.row[item.prop] === item['confirmItem'] ? item['successText'] : item['loseText'] }}</el-tag
+                >
               </template>
             </el-table-column>
           </template>
@@ -53,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, toRefs } from 'vue'
 import ContentBtnArea from './cpns/content-btn-area.vue'
 const props = defineProps({
   tableConfig: {
@@ -70,14 +66,16 @@ const props = defineProps({
   }
 })
 // 定义分页的数据
-const page = ref(1)
-const per_page = ref(10)
-const total = ref(0)
 
 const emit = defineEmits(['editClick', 'deleteClick'])
+const { contentData } = toRefs(props)
 const tableColumns: any = props.tableConfig?.tableColumns
 const isPagination: Boolean = props.tableConfig?.isPagination ?? false
-const contentData: any = props.contentData
+
+const page = props.tableConfig?.Epagination?.page ?? ref(1)
+const per_page = props.tableConfig?.Epagination?.per_page ?? ref(10)
+const total = props.tableConfig?.Epagination?.total ?? ref(0)
+
 // 编辑按钮事件
 const handleEditClick = (row: any) => {
   emit('editClick', row)
