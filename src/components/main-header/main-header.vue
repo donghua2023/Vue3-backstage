@@ -1,8 +1,12 @@
 <template>
   <div class="main">
-    <div class="fold" @click="foldClick">
-      <el-icon v-if="isFold" size="25"><Expand /></el-icon>
-      <el-icon v-if="!isFold" size="25"><Fold /></el-icon>
+    <div class="fold">
+      <el-tooltip class="box-item" effect="dark" content="折叠" placement="top">
+        <el-icon v-if="isFold" size="25" @click="foldClick" style="cursor: pointer"><Fold /></el-icon>
+      </el-tooltip>
+      <el-tooltip class="box-item" effect="dark" content="展开" placement="top">
+        <el-icon v-if="!isFold" size="25" @click="foldClick" style="cursor: pointer"><Expand /></el-icon>
+      </el-tooltip>
       <HeaderCrumb />
     </div>
     <HeaderInfo />
