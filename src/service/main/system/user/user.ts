@@ -11,9 +11,10 @@ export function fecthUserById(id:number) {
     url: `users/${id}`
   })
 }
-export function deleteUserById(id:number) {
+export function deleteUserById(ids:Array<any>) {
   return dhRequest.delete({
-    url: `users/${id}`
+    url: `users/`,
+    data: ids
   })
 }
 export function fecthRoleList(data:object) {
