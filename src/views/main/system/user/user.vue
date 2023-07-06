@@ -1,23 +1,18 @@
 <template>
   <div class="main">
-    <page-search
-      :searchData="searchConfig"
-      @queryClick="fecthUserListData"
-      v-show="!isSearchHide"></page-search>
+    <page-search :searchData="searchConfig" @queryClick="fecthUserListData" v-show="!isSearchHide"></page-search>
     <page-content
       tableDataUrl="/department"
       :tableConfig="contentconfig"
       :contentData="userTableList"
-      @editClick="editClick"
-      @deleteClick="deleteClick">
+      @refresh="fecthUserListData"
+      @selection-change="selectionChange"
+      @edit-click="editClick"
+      @delete-click="deleteClick"
+      @page-common-btn-click="pageCommonBtnClick">
     </page-content>
   </div>
-  <el-dialog
-    v-model="userDialogVisible"
-    :title="userTips"
-    width="30%"
-    center
-    @close="userDialogCancel">
+  <el-dialog v-model="userDialogVisible" :title="userTips" width="30%" center @close="userDialogCancel">
     <el-form :model="userDialogForm" label-width="80px" ref="userDialogFormRef">
       <el-form-item label="用户名" prop="name">
         <el-input v-model="userDialogForm.name" />
@@ -35,23 +30,13 @@
 
       <el-form-item label="选择角色" prop="roleId">
         <el-select v-model="userDialogForm.roleId" placeholder="请选择角色">
-          <el-option
-            v-for="item in roleIdOptions"
-            :key="item['id']"
-            :label="item['name']"
-            :value="item['id']" />
+          <el-option v-for="item in roleIdOptions" :key="item['id']" :label="item['name']" :value="item['id']" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="选择部门" prop="departmentId">
-        <el-select
-          v-model="userDialogForm.departmentId"
-          placeholder="请选择部门">
-          <el-option
-            v-for="item in departmentIdOptions"
-            :key="item['id']"
-            :label="item['name']"
-            :value="item['id']" />
+        <el-select v-model="userDialogForm.departmentId" placeholder="请选择部门">
+          <el-option v-for="item in departmentIdOptions" :key="item['id']" :label="item['name']" :value="item['id']" />
         </el-select>
       </el-form-item>
     </el-form>
@@ -69,12 +54,7 @@ import { ref, reactive, provide } from 'vue'
 import useUserstore from '@/stores/main/system/user/user'
 import { searchConfig } from './config/search.config.ts'
 import { contentconfig } from './config/content.config'
-import {
-  fecthUserById,
-  deleteUserById,
-  saveUser,
-  editUser
-} from '@/service/main/system/user/user'
+import { fecthUserById, deleteUserById, saveUser, editUser } from '@/service/main/system/user/user'
 import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -120,13 +100,7 @@ let userDialogForm: IuserInfo = reactive({
 let userDialogFormRef = ref()
 const userDialogVisible = ref(false)
 const userTips = ref('默认')
-// const addUserItem = () => {
-//   isEdit.value = false
-//   userStore.getRoleList()
-//   userStore.getDepartmentList()
-//   userDialogVisible.value = true
-//   userTips.value = '新增用户'
-// }
+
 const editUserId = ref()
 
 const userDialogCancel = () => {
@@ -138,6 +112,7 @@ const userDialogCancel = () => {
   userDialogForm.roleId = ''
   userDialogForm.departmentId = ''
 }
+
 const userDialogSave = async () => {
   if (isEdit.value) {
     const obj = {
@@ -187,12 +162,13 @@ const userDialogSave = async () => {
 }
 
 const editClick = async (row: any) => {
-  console.log(row, '编辑')
+  // 获取部门角色下拉框的数据
   userStore.getRoleList()
   userStore.getDepartmentList()
+
   isEdit.value = true
-  editUserId.value = row.id
-  const { data } = await fecthUserById(row.id)
+  editUserId.value = row.user_id
+  const { data } = await fecthUserById(row.user_id)
   // userDialogForm = reactive(data)
   userDialogForm = reactive({
     name: data.name,
@@ -206,14 +182,21 @@ const editClick = async (row: any) => {
   userDialogVisible.value = true
 }
 const deleteClick = (row: any) => {
-  console.log(row, '删除')
+  let ids: Array<any> = []
+  if (Array.isArray(row)) {
+    row.forEach((item) => {
+      ids.push(item.user_id)
+    })
+  } else {
+    ids.push(row.user_id)
+  }
   ElMessageBox.confirm('确认删除该用户？', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
     type: 'warning'
   })
     .then(async () => {
-      const res = await deleteUserById(row.id)
+      const res = await deleteUserById(ids)
       if (res.code === 0) {
         ElMessage({
           message: '删除成功',
@@ -233,6 +216,47 @@ const deleteClick = (row: any) => {
         type: 'info'
       })
     })
+}
+// 表格的选中事件
+let selectRows: Array<any> = []
+const selectionChange = (rows: any) => {
+  selectRows = rows
+}
+// 公共组件点击事件
+const pageCommonBtnClick = (param: any) => {
+  switch (param) {
+    case 'add':
+      isEdit.value = false
+      userStore.getRoleList()
+      userStore.getDepartmentList()
+      userTips.value = '新增用户'
+      userDialogVisible.value = true
+      break
+    case 'edit':
+      if (selectRows.length < 1) {
+        ElMessage.error('请选择数据再操作')
+      } else if (selectRows.length > 1) {
+        ElMessage.error('一次只能修改一条数据')
+      } else {
+        editClick(selectRows[0])
+      }
+      break
+    case 'delete':
+      if (selectRows.length < 1) {
+        ElMessage.error('请选择数据再操作')
+      } else {
+        deleteClick(selectRows)
+      }
+      break
+    case 'into':
+      console.log('into')
+      break
+    case 'out':
+      console.log('out')
+      break
+    default:
+      ElMessage('没有该点击事件,请联系管理员！！！')
+  }
 }
 </script>
 
