@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="btnArea">
-      <content-btn-area></content-btn-area>
+      <content-btn-area @common-btn-click="commonBtnClick" @refresh="$emit('refresh')"></content-btn-area>
     </div>
     <div class="content">
-      <el-table :data="contentData" border style="width: 100%" max-height="400" fit>
+      <el-table :data="contentData" border style="width: 100%" max-height="400" fit @selection-change="selectionChange">
         <template v-for="item in tableColumns">
           <template v-if="item.type === 'handler'">
             <el-table-column v-bind="item" align="center">
@@ -67,7 +67,7 @@ const props = defineProps({
 })
 // 定义分页的数据
 
-const emit = defineEmits(['editClick', 'deleteClick'])
+const emit = defineEmits(['editClick', 'deleteClick', 'pageCommonBtnClick', 'selectionChange'])
 const { contentData } = toRefs(props)
 const tableColumns: any = props.tableConfig?.tableColumns
 const isPagination: Boolean = props.tableConfig?.isPagination ?? false
@@ -87,6 +87,14 @@ const handleDeleteClick = (row: any) => {
 // 分页
 const handleCurrentChange = () => {}
 const handleSizeChange = () => {}
+
+// 发射公共按钮的点击事件
+const commonBtnClick = (param: any) => {
+  emit('pageCommonBtnClick', param)
+}
+const selectionChange = (selectedRows: any) => {
+  emit('selectionChange', selectedRows)
+}
 </script>
 
 <style lang="less" scoped>
