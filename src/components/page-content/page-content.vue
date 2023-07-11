@@ -100,7 +100,7 @@ const selectionChange = (selectedRows: any) => {
 <style lang="less" scoped>
 .Ipagination {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   padding: 10px 40px 10px 0;
 }
 .container {
