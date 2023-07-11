@@ -8,10 +8,13 @@ import router from './router'
 import store from './stores'
 import icons from './global/register-icons'
 import component from './components'
+import { setDomFontSize } from './utils/dom'
 
 const app = createApp(App)
 // use(store)放在use(router)的前面，保证匹配动态路由时有数据，不然会出现空白页
 app.use(store).use(router).use(ElementPlus).use(icons).use(component)
+
+setDomFontSize()
 
 app.mount('#app')
 
