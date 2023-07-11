@@ -2,7 +2,7 @@
   <div class="main">
     <div class="title">
       <img src="@/assets/img/logo.svg" alt="logo" class="IMG" />
-      <span v-show="!isFold">后台管理系统</span>
+      <span v-show="!isFold" style="font-size: 12px">后台管理系统</span>
     </div>
     <div class="list">
       <el-menu
@@ -12,22 +12,15 @@
         text-color="#b7bdc3"
         router
         :default-active="defaultIndex"
-        :collapse="isFold"
-      >
+        :collapse="isFold">
         <template v-for="item in userMenu" :key="item.id">
           <el-sub-menu :index="item.id + ''">
             <template #title>
-              <el-icon
-                ><component :is="item.icon.split('-icon-')[1]"></component
-              ></el-icon>
+              <el-icon><component :is="item.icon.split('-icon-')[1]"></component></el-icon>
               <span>{{ item.name }}</span>
             </template>
             <el-menu-item-group v-for="sItem in item.children">
-              <el-menu-item
-                :index="sItem.id + ''"
-                @click="handleItemclick(sItem)"
-                >{{ sItem.name }}</el-menu-item
-              >
+              <el-menu-item :index="sItem.id + ''" @click="handleItemclick(sItem)">{{ sItem.name }}</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
         </template>
@@ -81,7 +74,7 @@ const defaultIndex = computed(() => {
   }
   .list {
     display: flex;
-    padding: 20px 10px;
+    padding: 10px 10px;
   }
   .el-menu {
     user-select: none;
