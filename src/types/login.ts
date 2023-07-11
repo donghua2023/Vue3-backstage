@@ -1,5 +1,5 @@
 export interface IAccount {
-  name: string,
+  name: string
   password: string
 }
 export const CACHE_NAME = 'name'

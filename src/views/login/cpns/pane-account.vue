@@ -1,12 +1,6 @@
 <template>
   <div class="pane-account">
-    <el-form
-      :model="account"
-      :rules="accountRules"
-      label-width="60px"
-      size="large"
-      ref="formRef"
-    >
+    <el-form :model="account" :rules="accountRules" label-width="60px" size="large" ref="formRef">
       <el-form-item label="账号" prop="name">
         <el-input v-model="account.name"></el-input>
       </el-form-item>

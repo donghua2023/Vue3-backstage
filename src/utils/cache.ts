@@ -10,13 +10,13 @@ class Cache {
     this.storage = type === CacheType.Local ? localStorage : sessionStorage
   }
   setCache(key: string, value: any) {
-    if(value) {
+    if (value) {
       this.storage.setItem(key, JSON.stringify(value))
     }
   }
   getCache(key: string) {
     const value = this.storage.getItem(key)
-    if(value) {
+    if (value) {
       return JSON.parse(value)
     }
   }
@@ -29,4 +29,4 @@ class Cache {
 }
 const localCache = new Cache(CacheType.Local)
 const sessionCache = new Cache(CacheType.Session)
-export {localCache, sessionCache}
+export { localCache, sessionCache }

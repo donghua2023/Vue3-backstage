@@ -29,21 +29,10 @@
     </div>
     <!-- 底部区域 -->
     <div class="controls">
-      <el-checkbox
-        v-model="isRemPwd"
-        label="记住密码"
-        size="large"
-      ></el-checkbox>
+      <el-checkbox v-model="isRemPwd" label="记住密码" size="large"></el-checkbox>
       <el-link type="primary">忘记密码</el-link>
     </div>
-    <el-button
-      class="login-btn"
-      type="primary"
-      size="large"
-      @click="handleLoginBtnclick"
-    >
-      立即登录
-    </el-button>
+    <el-button class="login-btn" type="primary" size="large" @click="handleLoginBtnclick"> 立即登录 </el-button>
   </div>
 </template>
 

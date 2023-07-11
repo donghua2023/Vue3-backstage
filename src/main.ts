@@ -17,4 +17,3 @@ app.use(store).use(router).use(ElementPlus).use(icons).use(component)
 setDomFontSize()
 
 app.mount('#app')
-

@@ -1,9 +1,9 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import type { IAccount } from '@/types'
-import {accountLoginRequest, getUserInfoById, getUserRoleById} from '@/service/login/login'
-import {localCache} from '@/utils/cache'
-import {LOGIN_TOKEN} from '@/types'
-import { mapMenusToRoutes} from '@/utils/map-menu'
+import { accountLoginRequest, getUserInfoById, getUserRoleById } from '@/service/login/login'
+import { localCache } from '@/utils/cache'
+import { LOGIN_TOKEN } from '@/types'
+import { mapMenusToRoutes } from '@/utils/map-menu'
 import router from '@/router'
 
 interface ILoginState {
@@ -12,14 +12,14 @@ interface ILoginState {
   roleList: any
 }
 const useLoginStore = defineStore('login', {
-  state: ():ILoginState=> ({
+  state: (): ILoginState => ({
     token: '',
     userInfo: [],
     roleList: []
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
-      const {data} = await accountLoginRequest(account)
+      const { data } = await accountLoginRequest(account)
       const userId = data.id
       this.token = data.token
 
@@ -40,7 +40,7 @@ const useLoginStore = defineStore('login', {
 
       // 动态匹配路由
       const routes = mapMenusToRoutes(this.roleList)
-      routes.forEach(route=>{
+      routes.forEach((route) => {
         router.addRoute('main', route)
       })
       router.push('/main')
@@ -53,13 +53,13 @@ const useLoginStore = defineStore('login', {
       const token = localCache.getCache(LOGIN_TOKEN)
       const userInfo = localCache.getCache('userInfo')
       const roleList = localCache.getCache('roleList')
-      if(token && userInfo && roleList) {
+      if (token && userInfo && roleList) {
         this.token = token
         this.userInfo = userInfo
         this.roleList = roleList
         // 初始化路由
         const routes = mapMenusToRoutes(roleList)
-        routes.forEach((route)=>{
+        routes.forEach((route) => {
           router.addRoute('main', route)
         })
         // router.push(router.currentRoute.value.path)
@@ -69,10 +69,8 @@ const useLoginStore = defineStore('login', {
         //空白页的问题解决了，main.ts中，use（store）要在路由的前面，不然匹配动态路由会没有初始化，从而匹配到404
         // 解决router4刷新变成空白页（我们需要手动调用 router.replace() 来改变当前的位置，并覆盖我们原来的位置）
         // router.replace(router.currentRoute.value.fullPath)
-
       }
     }
-
   }
 })
 export default useLoginStore

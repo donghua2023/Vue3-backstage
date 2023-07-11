@@ -1,50 +1,25 @@
 <template>
   <div class="content">
-    <el-form
-      :inline="true"
-      ref="searchFormRef"
-      :model="searchForm"
-      class="demo-form-inline"
-      label-width="80px">
+    <el-form :inline="true" ref="searchFormRef" :model="searchForm" class="demo-form-inline" label-width="80px">
       <template v-for="item in searchData">
-        <el-form-item
-          v-if="item.type === 'input'"
-          :label="item.label"
-          :prop="item.prop">
-          <el-input
-            v-model="searchForm[item.prop]"
-            :placeholder="item.placeholder"
-            :size="item.size ?? 'large'" />
+        <el-form-item v-if="item.type === 'input'" :label="item.label" :prop="item.prop">
+          <el-input v-model="searchForm[item.prop]" :placeholder="item.placeholder" :size="item.size ?? 'large'" />
         </el-form-item>
-        <el-form-item
-          v-if="item.type === 'select'"
-          :label="item.label"
-          :prop="item.prop">
-          <el-select
-            v-model="searchForm[item.prop]"
-            :placeholder="item.placeholder"
-            :size="item.size ?? 'large'">
+        <el-form-item v-if="item.type === 'select'" :label="item.label" :prop="item.prop">
+          <el-select v-model="searchForm[item.prop]" :placeholder="item.placeholder" :size="item.size ?? 'large'">
             <template v-for="sItem in item.options">
               <el-option :label="sItem.label" :value="sItem.value"></el-option>
             </template>
           </el-select>
         </el-form-item>
-        <el-form-item
-          v-if="item.type === 'radio'"
-          :label="item.label"
-          :prop="item.prop">
+        <el-form-item v-if="item.type === 'radio'" :label="item.label" :prop="item.prop">
           <el-radio-group v-model="searchForm[item.prop]">
             <template v-for="sItem in item.options">
-              <el-radio :label="sItem.value" :size="item.size ?? 'large'">{{
-                sItem.label
-              }}</el-radio>
+              <el-radio :label="sItem.value" :size="item.size ?? 'large'">{{ sItem.label }}</el-radio>
             </template>
           </el-radio-group>
         </el-form-item>
-        <el-form-item
-          v-if="item.type === 'date'"
-          :label="item.label"
-          :prop="item.prop">
+        <el-form-item v-if="item.type === 'date'" :label="item.label" :prop="item.prop">
           <el-date-picker
             popper-class="popperClass"
             v-model="searchForm[item.prop]"
@@ -58,16 +33,8 @@
       </template>
     </el-form>
     <div class="btnArea">
-      <el-button icon="Refresh" size="large" @click="handleResetClick"
-        >重置</el-button
-      >
-      <el-button
-        type="primary"
-        icon="Search"
-        size="large"
-        @click="$emit('queryClick', searchForm)"
-        >查询</el-button
-      >
+      <el-button icon="Refresh" size="large" @click="handleResetClick">重置</el-button>
+      <el-button type="primary" icon="Search" size="large" @click="$emit('queryClick', searchForm)">查询</el-button>
     </div>
   </div>
 </template>

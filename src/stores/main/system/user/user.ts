@@ -1,8 +1,8 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 import { postUsersListData, fecthRoleList, fecthDepartmentList } from '@/service/main/system/user/user'
 
 const useUserstore = defineStore('user', {
-  state: ()=>({
+  state: () => ({
     isSearchHide: false,
     userTableList: [],
     totalCount: 0,
@@ -11,7 +11,7 @@ const useUserstore = defineStore('user', {
   }),
   actions: {
     async postUsersListAction(param: object) {
-      const {data} = await postUsersListData(param)
+      const { data } = await postUsersListData(param)
       this.userTableList = data.list
       this.totalCount = data.totalCount
     },
@@ -20,7 +20,7 @@ const useUserstore = defineStore('user', {
       this.roleIdOptions = data.list
     },
     async getDepartmentList() {
-      const {data} = await fecthDepartmentList({offset: 0, size: 100})
+      const { data } = await fecthDepartmentList({ offset: 0, size: 100 })
       this.departmentIdOptions = data.list
     }
   }

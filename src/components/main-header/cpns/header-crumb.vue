@@ -3,9 +3,7 @@
     <div class="crumb">
       <el-breadcrumb separator-icon="ArrowRight">
         <template v-for="item in breadCrumbData" :index="index">
-          <el-breadcrumb-item :to="item.url">{{
-            item.name
-          }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="item.url">{{ item.name }}</el-breadcrumb-item>
         </template>
       </el-breadcrumb>
     </div>

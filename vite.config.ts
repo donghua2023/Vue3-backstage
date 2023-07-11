@@ -6,22 +6,22 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 //以下两行代码是配置
 import path from 'path'
-const resolve = (dir:string) => path.resolve(__dirname, dir)
+const resolve = (dir: string) => path.resolve(__dirname, dir)
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver()]
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
-    }),
+      resolvers: [ElementPlusResolver()]
+    })
   ],
-  resolve:{
+  resolve: {
     //这里是别名的映射规则
-    alias:{
+    alias: {
       '@': resolve('src'),
       '@components': resolve('src/components'),
       '@utils': resolve('src/utils')

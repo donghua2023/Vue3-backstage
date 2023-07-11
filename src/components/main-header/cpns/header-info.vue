@@ -11,10 +11,7 @@
     <div class="info">
       <el-dropdown>
         <span class="userInfo">
-          <el-avatar
-            :size="30"
-            src="https://upload.jianshu.io/users/upload_avatars/1102036/c3628b478f06.jpeg"
-          />
+          <el-avatar :size="30" src="https://upload.jianshu.io/users/upload_avatars/1102036/c3628b478f06.jpeg" />
           <span class="userName">coder</span>
         </span>
         <template #dropdown>

@@ -1,9 +1,6 @@
 <template>
   <div>
-    <page-search
-      :searchData="searchConfig"
-      @queryClick="handleQueryClick"
-      v-show="!isSearchHide"></page-search>
+    <page-search :searchData="searchConfig" @queryClick="handleQueryClick" v-show="!isSearchHide"></page-search>
     <page-content
       tableDataUrl="/user"
       :tableConfig="contentconfig"

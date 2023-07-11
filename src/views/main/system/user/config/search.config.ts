@@ -23,8 +23,8 @@ export const searchConfig: any = [
     prop: 'enable',
     placeholder: '请选择查询的状态',
     options: [
-      {label: '启用', value: '1'},
-      {label: '禁用', value: '0'}
+      { label: '启用', value: '1' },
+      { label: '禁用', value: '0' }
     ]
   },
   { type: 'date', label: '创建时间', prop: 'createAt' }
